@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Login</title>
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+
+
+    <style>
+
+
+        body {
+            margin: 0;
+            background-color: #4a265e; /* shows if mcu.jpg is missing */
+            background-image: url("mcu.jpg");
+            background-attachment: fixed; /*para di gumalaw o mag distort ung img pag may other elements na sa html*/
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+           
+        }
+
+
+        .visitor_card {
+            background-color: white;
+            padding: 5px;
+            width: 450px;
+            height: 350px;
+            border-radius: 20px;
+            filter: drop-shadow(0 0 15px #c4c3c3);
+            transition: width 1s, height 1s, filter 1s;
+        }
+
+
+        .visitor_card:hover {
+            width: 480px;
+            height: 380px;
+            filter: drop-shadow(0 0 15px #817f7f);
+ 
+        }
+
+
+        .title {
+            font-family: "DM Sans", sans-serif;
+            text-align: center;
+            font-weight: 1000;
+            font-size: 30px;
+            padding: 10px;
+            margin-top: 70px;
+
+
+        }
+
+
+        a {
+            text-decoration: none;
+        }
+    </style>
+
+
+</head>
+<body>
+ 
+
+
+<a href="logbookForm.html">
+    <div class="visitor_card">
+        <div class="card_details">
+            <p class="title">VISITOR LOGIN</p>
+        </div>
+    </div>
+</a>
+
+
+</body>
+</html>

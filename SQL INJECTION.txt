@@ -1,0 +1,108 @@
+-- Digital Visitor Tracker and Logbook for Security
+-- Import via phpMyAdmin: Import tab -> choose this file -> Go
+
+
+-- ---------- Parent tables first ----------
+
+CREATE TABLE `user` (
+  user_id     INT AUTO_INCREMENT PRIMARY KEY,
+  username    VARCHAR(50)  NOT NULL UNIQUE,
+  password    VARCHAR(255) NOT NULL,              -- store password_hash() output, never plain text
+  firstname   VARCHAR(50)  NOT NULL,
+  lastname    VARCHAR(50)  NOT NULL,
+  role        ENUM('admin','guard','staff') NOT NULL DEFAULT 'guard',
+  email       VARCHAR(100) UNIQUE,
+  status      ENUM('active','inactive') NOT NULL DEFAULT 'active',
+  created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE visitor (
+  visitor_id           INT AUTO_INCREMENT PRIMARY KEY,
+  firstname            VARCHAR(50)  NOT NULL,
+  middlename           VARCHAR(50),
+  lastname             VARCHAR(50)  NOT NULL,
+  contact_number       VARCHAR(20)  NOT NULL,
+  email                VARCHAR(100),
+  company_organization VARCHAR(100),
+  address              VARCHAR(255),
+  id_type              VARCHAR(50),
+  id_number            VARCHAR(50),
+  photo                VARCHAR(255),               -- file path of the photo
+  -- not in your ERD, but your form/dashboard use them:
+  visitor_type         ENUM('Student','Faculty','Parent','Guest') NOT NULL,
+  birthdate            DATE,
+  created_at           TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE device (
+  device_id    INT AUTO_INCREMENT PRIMARY KEY,
+  device_name  VARCHAR(100) NOT NULL,
+  device_type  VARCHAR(50),
+  device_model VARCHAR(100),
+  os_version   VARCHAR(50),
+  created_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+-- ---------- Child tables ----------
+
+CREATE TABLE visitor_log (
+  log_id        INT AUTO_INCREMENT PRIMARY KEY,
+  visitor_id    INT NOT NULL,
+  user_id       INT NOT NULL,                      -- guard/staff who recorded it
+  date_time_in  DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_time_out DATETIME NULL,
+  purpose       VARCHAR(255),
+  remarks       VARCHAR(255),
+  status        ENUM('active','checked_out') NOT NULL DEFAULT 'active',
+  qr_code       VARCHAR(255),
+  created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (visitor_id) REFERENCES visitor(visitor_id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id)    REFERENCES `user`(user_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE location (
+  location_id INT AUTO_INCREMENT PRIMARY KEY,
+  log_id      INT NOT NULL,
+  device_id   INT NULL,                            -- ERD shows Device 1-to-many Location
+  building    VARCHAR(100) NOT NULL,
+  floor       VARCHAR(20),
+  room        VARCHAR(50),
+  time_stamp  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (log_id)    REFERENCES visitor_log(log_id) ON DELETE CASCADE,
+  FOREIGN KEY (device_id) REFERENCES device(device_id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE report (
+  report_id      INT AUTO_INCREMENT PRIMARY KEY,
+  user_id        INT NOT NULL,
+  report_type    VARCHAR(50) NOT NULL,
+  date_generated DATETIME DEFAULT CURRENT_TIMESTAMP,
+  file_path      VARCHAR(255),
+  created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES `user`(user_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE access_log (
+  access_id  INT AUTO_INCREMENT PRIMARY KEY,
+  user_id    INT NOT NULL,
+  action     VARCHAR(100) NOT NULL,                -- e.g. login, logout, view_report
+  module     VARCHAR(50),
+  ip_address VARCHAR(45),                          -- 45 chars fits IPv6
+  timestamp  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES `user`(user_id)
+) ENGINE=InnoDB;
+
+-- ---------- Sample data for testing ----------
+-- Replace the password hash later with one made by PHP's password_hash()
+INSERT INTO `user` (username, password, firstname, lastname, role, email)
+VALUES ('admin', 'CHANGE_ME_USE_password_hash', 'Admin', 'User', 'admin', 'admin@example.com'),
+       ('guard1', 'CHANGE_ME_USE_password_hash', 'Guard', 'One', 'guard', 'guard1@example.com');
+
+INSERT INTO visitor (firstname, lastname, contact_number, visitor_type)
+VALUES ('John', 'Doe', '09123456789', 'Guest');
+
+INSERT INTO visitor_log (visitor_id, user_id, purpose)
+VALUES (1, 2, 'Inquiry');
+
+INSERT INTO location (log_id, building)
+VALUES (1, 'PGT Building');

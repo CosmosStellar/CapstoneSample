@@ -1,2 +1,1 @@
-# CapstoneSample
-ian-aaron part
+CapstoneSample

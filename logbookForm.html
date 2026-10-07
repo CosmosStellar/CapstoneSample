@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Logbook Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        .absTask
+    {
+        position: absolute;
+        top: 0vh;
+        width:100%;
+        height: 5%;
+        background-color: #4a265e;
+        transition: height 2s ease;
+        align-content: center;
+    }
+      .absTask:hover
+    {
+        position: absolute;
+        top: 0vh;
+        width:100%;
+        height: 10%;
+        background-color: #4a265e;
+    }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f4eff8, #ffffff);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+        }
+
+        .form-card {
+            width: 650px;
+            max-width: 100%;
+
+            background: #ffffff;
+
+            padding: 45px 55px;
+
+            border-radius: 18px;
+
+            border: 1px solid #e2dce6;
+
+            box-shadow: 0 12px 35px rgba(81, 37, 104, 0.15);
+        }
+
+        .form-title {
+            margin: 0;
+
+            color: #512568;
+
+            font-size: 30px;
+            font-weight: 800;
+
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #333;
+
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+
+            height: 46px;
+
+            padding: 10px 14px;
+
+            border: 1px solid #d7d1dc;
+
+            border-radius: 8px;
+
+            background: #fafafa;
+
+            color: #333;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #512568;
+
+            background: #ffffff;
+
+            box-shadow: 0 0 0 3px rgba(81, 37, 104, 0.10);
+        }
+
+        .options-row {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .btn-submit {
+            width: 100%;
+
+            height: 48px;
+
+            margin-top: 8px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #512568;
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: #693383;
+
+            transform: translateY(-1px);
+
+            box-shadow: 0 5px 12px rgba(81, 37, 104, 0.20);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            display: block;
+
+            text-align: center;
+
+            margin-top: 18px;
+
+            color: #512568;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 18px;
+            }
+
+            .form-card {
+                padding: 35px 25px;
+            }
+
+            .form-title {
+                font-size: 26px;
+            }
+
+            .options-row {
+                grid-template-columns: 1fr;
+
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class = "absTask">
+ 
+    </div>
+
+    <div class="form-card">
+
+        <h1 class="form-title">Visitor Logbook Form</h1>
+
+        <br>
+
+        <form action="SaveLog.php" method="POST" onsubmit="return valData()">
+
+            <div class="form-group">
+
+                <label for="fullName">
+                    Full Name:
+                </label>
+
+                <input
+                    type="text" name="fullName" id="fullName" placeholder="Enter your full name"
+                    required>
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="contactNo">
+                    Contact Number:
+                </label>
+
+                <input
+                    type="text" name="contactNo" id="contactNo" placeholder="e.g. 09123456789" maxlength="20"
+                    required>
+            </div>
+
+            <div class="form-group">
+
+                <label for="birthdate">
+                    Birthdate (optional):
+                </label>
+
+                <input
+                    type="date" name="birthdate" id="birthdate">
+            </div>
+
+            <div class="options-row">
+
+                <div class="form-group">
+
+                    <label for="visitorType">
+                        Visitor Type:
+                    </label>
+
+                    <select
+                        name="visitorType" id="visitorType" required>
+
+                        <option value="" selected disabled>
+                            Select visitor type
+                        </option>
+
+                        <option value="Student">
+                            Student
+                        </option>
+
+                        <option value="Faculty">
+                            Faculty
+                        </option>
+
+                        <option value="Parent">
+                            Parent
+                        </option>
+
+                        <option value="Guest">
+                            Guest
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="building">
+                        Building:
+                    </label>
+
+                    <select
+                        name="building"
+                        id="building"
+                        required>
+
+                        <option value="" selected disabled>
+                            Select building
+                        </option>
+                        <option value="Admin Building">Admin Building</option>
+                        <option value="FDT">FDT</option>
+                        <option value="Anatomy Building">Anatomy Building</option>
+                        <option value="Arch">Arch</option>
+                        <option value="PGT Building">PGT Building</option>
+                        <option value="GPL Building">GPL Building</option>
+                        <option value="LRC Building">LRC Building</option>
+                        <option value="Purple Owl Complex">Purple Owl Complex</option>
+                        <option value="Centennial Gymnasium">Centennial Gymnasium</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <button
+                type="submit"
+                name="saving"
+                class="btn-submit">
+
+                SUBMIT
+
+            </button>
+
+            <a
+                href="visitorLogin.html"
+                class="back-link">
+
+                Back to Visitor Login
+
+            </a>
+
+        </form>
+
+    </div>
+
+
+    <script>
+
+        document.getElementById('birthdate').max = new Date().toISOString().split('T')[0];
+
+        function valData() {
+            var contact = document.getElementById('contactNo').value.trim();
+            if (!/^[0-9+\-\s()]{7,20}$/.test(contact)) {
+                alert('Please enter a valid contact number.');
+                return false;
+            }
+            return true;
+        }
+
+    </script>
+
+</body>
+</html>
